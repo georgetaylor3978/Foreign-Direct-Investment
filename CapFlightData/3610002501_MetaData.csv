@@ -1,0 +1,52 @@
+﻿"Cube Title","Product Id","CANSIM Id",URL,"Cube Notes","Archive Status",Frequency,"Start Reference Period","End Reference Period","Total number of dimensions"
+"Balance of international payments, flows of Canadian direct investment abroad and foreign direct investment in Canada, quarterly","36100025","376-0121","https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610002501",,"CURRENT - a cube available to the public and that is current","Quarterly","2007-01-01","2025-10-01","4",
+
+"Dimension ID","Dimension name","Dimension Notes","Dimension Definitions"
+"1","Geography",,""
+"2","Type of direct investment",1,""
+"3","Countries",,""
+"4","Type of direct investment flows",,""
+
+"Dimension ID","Member Name","Classification Code","Member ID","Parent Member ID",Terminated,"Member Notes","Member Definitions"
+"1","Canada","[11124]","1","","",,
+"2","Canadian direct investment abroad","","1","","",2,
+"2","Foreign direct investment in Canada","","2","","",3,
+"3","All countries","","1","","",,
+"3","United States","","2","1","",,
+"3","All other countries","","3","1","",,
+"4","Total net flows","","1","","",,
+"4","Mergers and acquisitions","","2","1","",4,
+"4","Reinvested earnings","","3","1","",,
+"4","Other flows","","4","1","",,
+
+Symbol Legend
+Description,Symbol
+"not available for a specific reference period","..",
+"less than the limit of detection","<LOD",
+"value rounded to 0 (zero) where there is a meaningful distinction between true zero and the value that was rounded","0s",
+"data quality: excellent","A",
+"data quality: very good","B",
+"data quality: good","C",
+"data quality: acceptable","D",
+"use with caution","E",
+"too unreliable to be published","F",
+"not applicable","...",
+"preliminary","p",
+"revised","r",
+"suppressed to meet the confidentiality requirements of the Statistics Act","x",
+"terminated","t",
+
+"Survey Code","Survey Name"
+"1534","Canada's Balance of International Payments"
+"1537","Canada's International Investment Position"
+
+"Subject Code","Subject Name"
+"36","Economic accounts"
+
+"Note ID",Note
+1,"In the financial account, a plus sign denotes an increase in investment and a minus sign denotes a decrease in investment."
+2,"Canadian direct investment abroad (CDIA) excludes deposits (claims net of liabilities) of Canadian banks with their foreign affiliates and branches abroad."
+3,"Foreign direct investment in Canada (FDIC) excludes deposits (liabilities net of claims) of Canadian subsidiaries and branches of foreign banks with their head offices and related companies abroad."
+4,"Net acquisitions or sales of new interest."
+
+"Correction ID","Correction Date","Correction Note"

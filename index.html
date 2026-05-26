@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canada Capital Flight Dashboard</title>
+  <meta name="description" content="Interactive dashboard tracking Canada's net capital inflows and outflows — FDI flow data from Statistics Canada Table 36-10-0025-01." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-text">
+        <h1>🍁 Canada Capital Flight</h1>
+        <p class="subtitle">Foreign Direct Investment Flows — Net Inflow / (Outflow) · 2007–2025</p>
+      </div>
+      <button class="theme-toggle" id="themeToggle" title="Toggle light/dark mode">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- KPI CARDS -->
+    <section class="kpi-row" id="kpiRow">
+      <div class="kpi-card net"><div class="kpi-accent"></div>
+        <div class="kpi-label" id="kpiNetLabel">Latest Annual Net</div>
+        <div class="kpi-value" id="kpiNetVal">—</div>
+        <div class="kpi-sub" id="kpiNetSub"></div>
+      </div>
+      <div class="kpi-card inflow"><div class="kpi-accent"></div>
+        <div class="kpi-label">Foreign Investment In Canada</div>
+        <div class="kpi-value" id="kpiInflowVal">—</div>
+        <div class="kpi-sub" id="kpiInflowSub">Annual total inflow</div>
+      </div>
+      <div class="kpi-card outflow"><div class="kpi-accent"></div>
+        <div class="kpi-label">Canadian Investment Abroad</div>
+        <div class="kpi-value" id="kpiOutflowVal">—</div>
+        <div class="kpi-sub" id="kpiOutflowSub">Annual total outflow</div>
+      </div>
+      <div class="kpi-card trend"><div class="kpi-accent"></div>
+        <div class="kpi-label">All-Time Cumulative Net</div>
+        <div class="kpi-value" id="kpiCumVal">—</div>
+        <div class="kpi-sub">Sum of all annual net flows</div>
+      </div>
+    </section>
+
+    <!-- CONTROLS -->
+    <section class="controls-bar">
+      <div class="control-group">
+        <span class="control-label">View</span>
+        <div class="seg-control" id="viewToggle">
+          <button class="seg-btn active" data-view="net">Net Flow</button>
+          <button class="seg-btn" data-view="both">In &amp; Out</button>
+          <button class="seg-btn" data-view="inflow">Inflow Only</button>
+          <button class="seg-btn" data-view="outflow">Outflow Only</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <span class="control-label">Chart</span>
+        <div class="seg-control" id="chartTypeToggle">
+          <button class="seg-btn active" data-ctype="bar">Bar</button>
+          <button class="seg-btn" data-ctype="line">Line</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <span class="control-label">Granularity</span>
+        <div class="seg-control" id="granToggle">
+          <button class="seg-btn active" data-gran="annual">Annual</button>
+          <button class="seg-btn" data-gran="quarterly">Quarterly</button>
+        </div>
+      </div>
+      <div class="control-group region-group">
+        <span class="control-label">Country</span>
+        <select id="countrySelect">
+          <option value="All countries">All Countries</option>
+          <option value="United States">United States</option>
+          <option value="All other countries">All Other Countries</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- MAIN CHART -->
+    <section class="chart-panel">
+      <div class="chart-panel-header">
+        <h2 class="panel-title" id="mainChartTitle">Net Capital Inflow / (Flight)</h2>
+        <p class="panel-note">Outflow sign flipped: negative = capital leaving Canada. Values in CAD millions.</p>
+      </div>
+      <div class="chart-wrapper main-chart-wrapper">
+        <canvas id="mainChart"></canvas>
+      </div>
+      <p class="source-note">Source: Statistics Canada · Table 36-10-0025-01</p>
+    </section>
+
+    <!-- OUTFLOW COMPONENTS -->
+    <section class="chart-panel">
+      <div class="chart-panel-header">
+        <h2 class="panel-title">Outflow Components — Canadian Investment Abroad</h2>
+        <p class="panel-note">Annual breakdown: M&amp;A, Reinvested Earnings, Other Flows (CAD millions).</p>
+      </div>
+      <div class="chart-wrapper" style="min-height:340px">
+        <canvas id="componentChart"></canvas>
+      </div>
+      <p class="source-note">Source: Statistics Canada · Table 36-10-0025-01</p>
+    </section>
+
+    <!-- US vs ROW -->
+    <section class="chart-panel">
+      <div class="chart-panel-header">
+        <h2 class="panel-title">Outflow Destination — U.S. vs All Other Countries</h2>
+        <p class="panel-note">Where Canadian capital goes each year (CAD millions).</p>
+      </div>
+      <div class="chart-wrapper" style="min-height:340px">
+        <canvas id="usVsRowChart"></canvas>
+      </div>
+      <p class="source-note">Source: Statistics Canada · Table 36-10-0025-01</p>
+    </section>
+
+    <!-- DATA TABLE -->
+    <section class="table-panel">
+      <div class="chart-panel-header">
+        <h2 class="panel-title">Annual Flow Summary (CAD Millions)</h2>
+        <p class="panel-note">Outflow = Canadian abroad. Inflow = Foreign in Canada. Net = Inflow − Outflow.</p>
+      </div>
+      <div class="table-scroll">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th class="num-col pos-col">Inflow</th>
+              <th class="num-col neg-col">Outflow</th>
+              <th class="num-col">Net</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Data: Statistics Canada · Table 36-10-0025-01 · Values in CAD Millions · <span id="footerYear"></span></p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

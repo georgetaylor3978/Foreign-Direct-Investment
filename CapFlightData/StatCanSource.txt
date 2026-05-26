@@ -1,0 +1,1 @@
+https://www150.statcan.gc.ca/t1/tbl1/en/cv!recreate.action?pid=3610002501&selectedNodeIds=&checkedLevels=0D1,1D1,2D1,2D2,3D1,3D2&refPeriods=20070101,20251001&dimensionLayouts=layout2,layout3,layout3,layout3,layout3&vectorDisplay=false
