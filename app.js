@@ -4,7 +4,7 @@ Chart.defaults.animation.duration = 400;
 
 let DATA = null; // { quarterly, years, quarters }
 let currentView = 'net', currentCtype = 'bar', currentGran = 'annual', currentCountry = 'All countries';
-let mainInst = null, compInst = null, usRowInst = null;
+let mainInst = null, compInst = null, usRowInst = null, inflowCompInst = null, inflowSrcInst = null;
 
 const C = {
   green:'rgb(0,229,160)', greenA:'rgba(0,229,160,0.75)', greenF:'rgba(0,229,160,0.12)',
@@ -114,6 +114,39 @@ function renderUsVsRowChart(){
   });
 }
 
+// ── INFLOW COMPONENT CHART ───────────────────────────────────────────────────
+function renderInflowComponentChart(){
+  const rows=buildInflowComponentRows(DATA.quarterly,DATA.years);
+  const labels=rows.map(r=>r.year.toString());
+  const opts=baseOpts();
+  opts.scales.y.stacked=true; opts.scales.x.stacked=true;
+  if(inflowCompInst)inflowCompInst.destroy();
+  inflowCompInst=new Chart(document.getElementById('inflowComponentChart'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'M&A',data:rows.map(r=>r.inMA),backgroundColor:'rgba(79,172,254,0.7)',borderColor:C.blue,borderWidth:1,borderRadius:3,stack:'s'},
+      {label:'Reinvested Earnings',data:rows.map(r=>r.inRE),backgroundColor:'rgba(0,229,160,0.7)',borderColor:C.green,borderWidth:1,borderRadius:3,stack:'s'},
+      {label:'Other Flows',data:rows.map(r=>r.inOther),backgroundColor:'rgba(247,201,107,0.7)',borderColor:C.gold,borderWidth:1,borderRadius:3,stack:'s'}
+    ]},options:opts
+  });
+}
+
+// ── INFLOW SOURCE CHART ──────────────────────────────────────────────────────
+function renderInflowSourceChart(){
+  const rows=buildInflowSourceRows(DATA.quarterly,DATA.years);
+  const labels=rows.map(r=>r.year.toString());
+  const opts=baseOpts();
+  opts.scales.y.stacked=true; opts.scales.x.stacked=true;
+  if(inflowSrcInst)inflowSrcInst.destroy();
+  inflowSrcInst=new Chart(document.getElementById('inflowSourceChart'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'United States',data:rows.map(r=>r.inUS),backgroundColor:'rgba(79,172,254,0.7)',borderColor:C.blue,borderWidth:1,borderRadius:3,stack:'s'},
+      {label:'All Other Countries',data:rows.map(r=>r.inROW),backgroundColor:'rgba(167,139,250,0.7)',borderColor:C.purple,borderWidth:1,borderRadius:3,stack:'s'}
+    ]},options:opts
+  });
+}
+
 // ── KPIs ────────────────────────────────────────────────────────────────────
 function updateKPIs(){
   const rows=buildAnnualRows(DATA.quarterly,DATA.years);
@@ -154,7 +187,7 @@ function renderTable(){
 }
 
 // ── RENDER ALL ──────────────────────────────────────────────────────────────
-function renderAll(){renderMainChart();renderComponentChart();renderUsVsRowChart();updateKPIs();renderTable();}
+function renderAll(){renderMainChart();renderComponentChart();renderUsVsRowChart();renderInflowComponentChart();renderInflowSourceChart();updateKPIs();renderTable();}
 
 // ── EVENTS ──────────────────────────────────────────────────────────────────
 function segClick(containerId,varName,cb){

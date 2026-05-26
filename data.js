@@ -171,3 +171,37 @@ function buildComponentRows(quarterly, years) {
     };
   });
 }
+
+/**
+ * Build annual component breakdown (inflows only):
+ * { year, inTotal, inMA, inRE, inOther }
+ */
+function buildInflowComponentRows(quarterly, years) {
+  const maps = {};
+  for (const ft of FLOW_TYPES) {
+    maps[ft] = quarterly.get(`${TYPE_INCA}|All countries|${ft}`);
+  }
+
+  return years.map(year => ({
+    year,
+    inTotal: sumYear(maps[FLOW_TOTAL], year),
+    inMA:    sumYear(maps[FLOW_MA],    year),
+    inRE:    sumYear(maps[FLOW_RE],    year),
+    inOther: sumYear(maps[FLOW_OTHER], year),
+  }));
+}
+
+/**
+ * Build annual inflow source breakdown: U.S. vs All other countries
+ * { year, inUS, inROW }
+ */
+function buildInflowSourceRows(quarterly, years) {
+  const usMap  = quarterly.get(`${TYPE_INCA}|United States|${FLOW_TOTAL}`);
+  const rowMap = quarterly.get(`${TYPE_INCA}|All other countries|${FLOW_TOTAL}`);
+
+  return years.map(year => ({
+    year,
+    inUS:  sumYear(usMap,  year),
+    inROW: sumYear(rowMap, year),
+  }));
+}
